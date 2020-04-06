@@ -6,7 +6,5 @@ Route::group([
     'namespace' =>  $namespace,
     'prefix'    =>  'form-builder'
 ], function (){
-    Route::get('/', function () {
-        return ['hello','Here we are!!!'];
-    });
+    Route::get('/', 'FormsController@index');
 });
