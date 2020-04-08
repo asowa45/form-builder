@@ -1,9 +1,9 @@
 <?php
 
-namespace App;
+namespace FormBuilder\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class Form extends Model
 {
@@ -18,30 +18,30 @@ class Form extends Model
 //        return $this->hasMany('App\FormFieldChildren','parent_form_id');
 //    }
 //
-//    public function setTableNameAttribute($value)
-//    {
-//        $this->attributes['table_name'] = snake_case(str_plural($value));
-//    }
+    public function setTableNameAttribute($value)
+    {
+        $this->attributes['table_name'] = Str::snake(Str::plural($value));
+    }
 //
-//    public function scopeActiveForms($query)
-//    {
-//        return $query->where('active', '=', 1)->where('collective', '=', 0);
-//    }
+    public function scopeActiveForms($query)
+    {
+        return $query->where('active', '=', 1)->where('collective', '=', 0);
+    }
 //
-//    public function scopeCollectives($query)
-//    {
-//        return $query->where('collective', '=', 1);
-//    }
+    public function scopeCollectives($query)
+    {
+        return $query->where('collective', '=', 1);
+    }
 //
-//    public function scopeActive($query)
-//    {
-//        return $query->where('active', '=', 1);
-//    }
+    public function scopeActive($query)
+    {
+        return $query->where('active', '=', 1);
+    }
 //
-//    public function scopeActiveCollectives($query)
-//    {
-//        return $query->where('collective', '=', 1)->where('active', '=', 1);
-//    }
+    public function scopeActiveCollectives($query)
+    {
+        return $query->where('collective', '=', 1)->where('active', '=', 1);
+    }
 //
 //    public function form_collective()
 //    {

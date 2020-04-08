@@ -1,5 +1,5 @@
 <?php
-namespace Formbuilder;
+namespace FormBuilder;
 use Illuminate\Support\Facades\Schema;
 use \Illuminate\Support\ServiceProvider;
 
@@ -21,7 +21,6 @@ class FormBuilderServiceProvider extends ServiceProvider
     }
 
     private function registerpublishables() {
-//        ini_set('memory_limit', '-1');
         $basePath = dirname(__DIR__);
 
         $arrPublishables = [
