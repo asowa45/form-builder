@@ -3,7 +3,10 @@
 namespace FormBuilder\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use FormBuilder\Helpers\FormEntities;
+use FormBuilder\Models\Field;
 use FormBuilder\Models\Form;
+use FormBuilder\Models\LookupOption;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -168,18 +171,19 @@ class FormsController extends Controller
      */
     public function build_form($form_id)
     {
-        return "Builder";
-//        $form = Form::find($form_id);
-//        $form_fields = Field::where('form_id','=',$form_id)->orderBy('order','asc')
-//            ->orderBy('label','asc')->get();
-//        $forms = Form::where('id','<>',$form_id)->orderBy('title','asc')->get();
+//        return "Builder";
+        $form = Form::find($form_id);
+        $form_fields = Field::where('form_id','=',$form_id)->orderBy('order','asc')
+            ->orderBy('label','asc')->get();
+        $forms = Form::where('id','<>',$form_id)->orderBy('title','asc')->get();
 //
-//        $f_fields = new FormEntities();
-//        $lookups = LookupOption::all();
-//        $fields = $f_fields->getFieldTypes();
-//        $roles = DB::table('roles')->orderBy('id','asc')->get();
+        $f_fields = new FormEntities();
+        $lookups = LookupOption::all();
+        $fields = $f_fields->getFieldTypes();
+        $roles = [];
 //
-//        return view('forms.build_field', compact('fields','form','forms','form_fields','lookups', 'roles'));
+//        return $form;
+        return view('formbuilder::form.build_field', compact('fields','form','forms','form_fields','lookups', 'roles'));
     }
 
     /**

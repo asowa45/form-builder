@@ -9,14 +9,14 @@ class Form extends Model
 {
     protected $fillable = ['title','slug','table_name','description','step','active','collective', 'workflow'];
 
-//    public function fields()
-//    {
-//        return $this->hasMany('App\Field');
-//    }
-//    public function sub_forms()
-//    {
-//        return $this->hasMany('App\FormFieldChildren','parent_form_id');
-//    }
+    public function fields()
+    {
+        return $this->hasMany('FormBuilder\Models\Field');
+    }
+    public function sub_forms()
+    {
+        return $this->hasMany('FormBuilder\Models\FormFieldChildren','parent_form_id');
+    }
 //
     public function setTableNameAttribute($value)
     {

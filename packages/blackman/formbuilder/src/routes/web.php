@@ -14,7 +14,8 @@ Route::group([
     Route::get('/edit/{form_id}', 'FormsController@edit')->name('form.edit');
     Route::put('/update/{form_id}', 'FormsController@update')->name('form.update');
     Route::get('/change-status/{form_id}', 'FormsController@activate')->name('form.activate');
-    Route::get('/build-fields', 'FormsController@build_fields')->name('form.builder');
+    Route::get('/build-fields/{form_id}', 'FormsController@build_form')->name('form.builder');
+    Route::post('/build-fields/{form_id}', 'FormsController@build_form')->name('form.builder.save');
     Route::get('/form-preview/{form_id}', 'FormsController@form_preview')->name('form.preview');
     Route::get('/form-remove/{form_id}', 'FormsController@destroy')->name('form.delete');
 
