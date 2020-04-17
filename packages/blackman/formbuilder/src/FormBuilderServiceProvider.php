@@ -29,6 +29,9 @@ class FormBuilderServiceProvider extends ServiceProvider
           ],
             'config'    =>  [
                 "$basePath/publishables/config/form-builder.php"    =>  config_path('form-builder.php'),
+            ],
+            'assets'    =>  [
+                "$basePath/publishables/assets"    =>  public_path('form-builder'),
             ]
         ];
 
