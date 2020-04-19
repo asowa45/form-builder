@@ -94,7 +94,6 @@
                                 </div>
                             </div>
 
-
                             <div class="col-md-4">
                                 <div class="form-group">
                                     {{--<label for="active"></label>--}}
@@ -109,7 +108,6 @@
                                     </div>
                                 </div>
                             </div>
-
                         </div>
 
                         <div class="row mt-1">

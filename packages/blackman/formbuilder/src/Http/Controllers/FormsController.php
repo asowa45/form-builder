@@ -115,11 +115,19 @@ class FormsController extends Controller
         $this->validate($request,[
             'title' => 'required|string|min:3|unique:forms,id',
             'description' => 'nullable|string|min:3',
-            'active' => 'nullable|string|min:0',
+            'active' => 'nullable|numeric|min:0',
+            'collective' => 'nullable|numeric|min:0',
+            'workflow' => 'nullable|numeric|min:0',
         ]);
-        $active = 0;
+        $active = $collective = $workflow = 0;
         if (isset($request->active)){
             $active = 1;
+        }
+        if (isset($request->collective)){
+            $collective = 1;
+        }
+        if (isset($request->workflow)){
+            $workflow = 1;
         }
 
         Form::where('id','=',$id)->update([
@@ -127,9 +135,17 @@ class FormsController extends Controller
             'description' => $request->description,
             'slug' => Str::slug($request->title),
             'active' => $active,
+            'collective' => $collective,
+            'workflow' => $workflow,
         ]);
 
-        return redirect()->route('forms');
+        session()->flash('status','Form Updated.');
+        if ($collective == 1){
+            return redirect()->route('form_collective.create',[$id]);
+        }
+        else{
+            return redirect()->route('forms');
+        }
     }
 
     /**
@@ -142,11 +158,11 @@ class FormsController extends Controller
     {
         $form = Form::find($form_id);
         if ($form->active == 1){
-            $form->active == 0;
+            $form->active = 0;
             $form->save();
             session()->flash('status','Form Deactivated.');
         }else{
-            $form->active == 1;
+            $form->active = 1;
             $form->save();
             session()->flash('status','Form Activated.');
         }

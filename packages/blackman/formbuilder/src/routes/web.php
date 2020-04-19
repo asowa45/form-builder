@@ -27,7 +27,20 @@ Route::group([
     Route::get('generate/form-table/{id}', 'FormsController@create_form_table')->name('create_form_table');
     Route::post('form/generate-form', 'FormsController@create_form_table')->name('form.generate_form');
 
-    Route::get('/collective-forms', function (){
-        return "Collective Forms";
-    })->name('form_collectives');
+    //Form Collectives
+    Route::get('/form-collectives', 'FormCollectiveController@index')->name('form_collectives');
+    Route::get('/form-collective/{id}/edit', 'FormCollectiveController@edit')->name('form_collective.edit');
+    Route::get('/form-collective/{id}/create', 'FormCollectiveController@create')->name('form_collective.create');
+    Route::get('/form-collective/{id}/view', 'FormCollectiveController@view')->name('form_collective.view');
+    Route::post('/form-collective/{id}/save', 'FormCollectiveController@save')->name('form_collective.save');
+    Route::get('/form-collective/{formId}/render', 'FormCollectiveController@form_render')->name('form_collective.render');
+    Route::get('/form-collective/{formId}/preview', 'FormCollectiveController@form_preview')->name('form_collective.preview');
+//Route::get('form-collective/{id}/edit','FormCollectiveController@edit')->name('form_collective.edit');
+    Route::put('/form-collective/{id}/update', 'FormCollectiveController@update')->name('form_collective.update');
+    Route::get('/form-collective/activate/{id}', 'FormCollectiveController@activate')->name('form_collective.activate');
+    Route::get('/generate/form-collective-tables/{id}', 'FormsController@generate_tables')->name('form_collective.generate_tables');
+    Route::delete('/form-collective/{id}', 'FormCollectiveController@destroy')->name('form_collective.delete');
+    Route::delete('/form-collective/{id}/form', 'FormCollectiveController@delete_form')->name('form_collective.form.delete');
+    Route::post('/form-collective/generate-form', 'FormCollectiveController@generate_collective_form_tables')->name('generate_collective_form_tables');
+
 });

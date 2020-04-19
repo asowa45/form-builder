@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-12">
         @php
-            $parent_table = str_plural($form->table_name);
+            $parent_table = \Illuminate\Support\Str::plural($form->table_name);
             $complete = 0;
             $cid = "";
             $total_forms = $form_collectives_forms->count();
@@ -72,8 +72,8 @@
             @foreach($form_collectives_forms as $form_collectives_form)
                 @php
                     $form_info = $form->where('id','=',$form_collectives_form->form_id)->first();
-                    $form_table = str_plural($form_info->table_name);
-                    $tableName = str_plural($parent_table."_".$form_table);
+                    $form_table = \Illuminate\Support\Str::plural($form_info->table_name);
+                    $tableName = \Illuminate\Support\Str::plural($parent_table."_".$form_table);
                     if (isset($request_id)){
                         $form_data = \Illuminate\Support\Facades\DB::table($tableName)
                         ->where('clearance_request_id',\Illuminate\Support\Facades\Crypt::decrypt($request_id))
@@ -111,7 +111,7 @@
                         <div class="row">
                             @php $subform_level = 0;@endphp
                             @foreach($form_info->fields->sortBy('order') as $form_field)
-                                @component('components.forms.'.$form_field->input_type,['form_field'=>$form_field,'tableName'=>$tableName,'cid'=>$cid,
+                                @component('formbuilder::components.forms.'.$form_field->input_type,['form_field'=>$form_field,'tableName'=>$tableName,'cid'=>$cid,
                                 'form_data'=>$form_data,'form_table'=>$form_table,'editable'=>$editable,'subform_level'=>$subform_level,'request_id'=>$request_id])
                                 @endcomponent
                                 {{--@php $display = 'none';@endphp--}}
@@ -123,8 +123,8 @@
                                         @php
                                             $form = $subform->form;
                                             $form_fields = $subform->form->fields;
-                                            $form_table = str_plural($form->table_name);
-                                            $tableName = str_plural($parent_table."_sub_".$form_table);
+                                            $form_table = \Illuminate\Support\Str::plural($form->table_name);
+                                            $tableName = \Illuminate\Support\Str::plural($parent_table."_sub_".$form_table);
 
                                             if (isset($request_id)){
                                                 $form_data = \Illuminate\Support\Facades\DB::table($tableName)
@@ -139,7 +139,7 @@
                                                 $form_data = null;
                                             }
                                         @endphp
-                                        @component('components.forms.render.sub_form.child_form',['subform'=>$subform,'editable'=>$editable,
+                                        @component('formbuilder::components.forms.render.sub_form.child_form',['subform'=>$subform,'editable'=>$editable,
                                         'form_fields'=>$form_fields,'form_data'=>$form_data,'tableName'=>$tableName,'request_id'=>$request_id,
                                         'form_table'=>$form_table,'parent_table'=>$parent_table,'subform_level'=>$subform_level,'cid'=>$cid])
                                         @endcomponent

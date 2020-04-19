@@ -1,5 +1,5 @@
 @extends('formbuilder::layouts.base')
-
+@push('head-scripts')@endpush
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
@@ -35,21 +35,21 @@
                                     <td>{{$form->title}}</td>
                                     {{--<td>{{$form->description}}</td>--}}
                                     <td>
-                                        <a href="{{route('form.edit',[$form->id])}}" title="Edit" class="btn btn-primary">
+                                        <a href="{{route('form.edit',[$form->id])}}" title="Edit" class="btn btn-primary btn-sm">
                                             Edit
                                         </a>
-                                        <a href="{{route('form.preview',[$form->id])}}" title="Preview Form" class="btn btn-primary">
+                                        <a href="{{route('form.preview',[$form->id])}}" title="Preview Form" class="btn btn-primary btn-sm">
                                             Preview
                                         </a>
                                         <a href="{{route('form.builder',[$form->id])}}"
-                                           class="btn btn-primary" title="Build Form">
+                                           class="btn btn-primary btn-sm" title="Build Form">
                                             Build Form
                                         </a>
                                         <a href="{{route('form.activate',[$form->id])}}"
-                                           class="btn @if($form->active == 1) btn-warning @else btn-success @endif">
+                                           class="btn @if($form->active == 1) btn-warning @else btn-success @endif btn-sm">
                                             <i class="fa fa-lock-open"></i> @if($form->active == 1) Deactivate @else Activate @endif
                                         </a>
-                                        <a class="dropdow-item btn btn-danger" href=""
+                                        <a class="dropdow-item btn btn-danger btn-sm" href=""
                                            onclick="document.getElementById('delete-form-{{$form->id}}').submit();" title="Delete">
                                             Delete
                                         </a>

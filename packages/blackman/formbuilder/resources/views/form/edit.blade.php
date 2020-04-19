@@ -57,14 +57,42 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="active"></label>
                                     <div class="">
                                         <div class="form-check">
-                                            <input class="form-check-input" name="active" @if($form->active == 1) checked @endif  type="checkbox" value="1" id="active">
+                                            <input class="form-check-input" name="active" @if($form->active == 1) checked @endif
+                                            type="checkbox" value="1" id="active">
                                             <label class="form-check-label" for="active">
                                                 Set form to active
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <div class="">
+                                        <div class="form-check">
+                                            <input class="form-check-input" name="collective" type="checkbox" value="1"
+                                                   @if($form->collective == 1) checked @endif id="collective">
+                                            <label class="form-check-label" for="collective">
+                                                Create a <strong>Collective Form</strong>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <div class="">
+                                        <div class="form-check">
+                                            <input class="form-check-input" name="workflow" type="checkbox" value="1"
+                                                   @if($form->workflow == 1) checked @endif id="workflow">
+                                            <label class="form-check-label" for="workflow">
+                                                Create a <strong>WorkFlow Form</strong>
                                             </label>
                                         </div>
                                     </div>

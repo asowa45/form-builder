@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-12">
         @php
-            $parent_table = str_plural($form->table_name);
+            $parent_table = \Illuminate\Support\Str::plural($form->table_name);
         @endphp
         <ul class="nav nav-tabs nav-top-border" id="myTab" role="tablist">
             @php
@@ -79,8 +79,8 @@
                                         @php
                                             $form = $subform->form;
                                             $form_fields = $subform->form->fields;
-                                            $form_table = str_plural($form->table_name);
-                                            $tableName = str_plural($parent_table."_sub_".$form_table);
+                                            $form_table = \Illuminate\Support\Str::plural($form->table_name);
+                                            $tableName = \Illuminate\Support\Str::plural($parent_table."_sub_".$form_table);
                                         @endphp
                                         @component('components.forms.preview.sub_form.child_form',['subform'=>$subform,
                                         'subform_level'=>$subform_level,'parent_table'=>$parent_table,

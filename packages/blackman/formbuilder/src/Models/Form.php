@@ -43,19 +43,19 @@ class Form extends Model
         return $query->where('collective', '=', 1)->where('active', '=', 1);
     }
 //
-//    public function form_collective()
-//    {
-//        return $this->hasOne('App\FormCollective','form_id');
-//    }
-//
-//    public function form_collectives()
-//    {
-//        return $this->belongsToMany('App\FormCollective','form_id');
-//    }
-//
-//    public function form_collectives_forms()
-//    {
-//        return $this->hasMany('App\FormCollectivesForm','form_id');
-//    }
+    public function form_collective()
+    {
+        return $this->hasOne('FormBuilder\Models\FormCollective','form_id');
+    }
+
+    public function form_collectives()
+    {
+        return $this->belongsToMany('FormBuilder\Models\FormCollective','form_id');
+    }
+
+    public function form_collectives_forms()
+    {
+        return $this->hasMany('FormBuilder\Models\FormCollectivesForm','form_id');
+    }
 
 }
