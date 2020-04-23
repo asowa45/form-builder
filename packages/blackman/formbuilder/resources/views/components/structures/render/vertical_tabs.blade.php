@@ -68,7 +68,7 @@
                             @if($form_collective->submit_type == 'individual' && $editable == 1)
                                 @if($count <= $next_step)
                                 <form action="{{($submit_url == null)?route('submit_form'): $submit_url}}"
-                                      @if($contain_file > 0) enctype="multipart/form-data" @endif
+                                      @if($contain_file) enctype="multipart/form-data" @endif
                                       method="post">@csrf
                                     <input type="hidden" name="form_id" value="{{$form_info->id}}">
                                     <input type="hidden" name="request_id" value="@if($request_id != null) {{$request_id }} @endif">

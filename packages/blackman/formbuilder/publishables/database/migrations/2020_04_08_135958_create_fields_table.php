@@ -53,7 +53,7 @@ class CreateFieldsTable extends Migration
             $table->tinyInteger('hasChild')->default(false);
             $table->json('forms')->nullable();
             $table->string('workflow_actors',100)->nullable();
-            $table->boolean('contains_data')->default(false);
+            $table->boolean('contains_data')->default(true);
             $table->timestamps();
         });
     }

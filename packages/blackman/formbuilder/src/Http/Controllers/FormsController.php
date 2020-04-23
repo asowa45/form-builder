@@ -10,6 +10,7 @@ use FormBuilder\Models\Form;
 use FormBuilder\Models\FormFieldChildren;
 use FormBuilder\Models\LookupOption;
 //use FormBuilder\Traits\FormGenerator;
+use FormBuilder\Traits\FormSubmission;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -18,7 +19,13 @@ use Illuminate\Support\Str;
 
 class FormsController extends Controller
 {
+    use FormSubmission;
 //    use FormGenerator;
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
     public function index()
     {
@@ -662,6 +669,61 @@ class FormsController extends Controller
         $generate_form->generate_form($form_id);
 
         session()->flash('status','Table created.');
+        return back();
+    }
+
+    public function submitRenderedForm(Request $request)
+    {
+        $request_id = $this->submit($request);
+        if ($request_id) {
+            $message = "A new record has been added";
+            $type = "success";
+            session()->flash($type,$message);
+        }
+        return back();
+    }
+
+
+    /**
+     * @param Request $request
+     * @return mixed
+     *
+     * Downloads the selected files uploaded for a request
+     */
+    public function getDownload(Request $request)
+    {
+        $file= $request->filePath;
+
+        try {
+
+            $file_exits =  \Illuminate\Support\Facades\Storage::exists("public/attachments/".$file);
+            if ($file_exits) {
+                return \Illuminate\Support\Facades\Storage::download( "public/attachments/".$file );
+            } else {
+                $file_exits =  \Illuminate\Support\Facades\Storage::exists($file);
+                if ($file_exits) {
+                    return \Illuminate\Support\Facades\Storage::download( $file );
+                }
+            }
+
+        }catch (\Exception $e) {
+            Log::critical($e->getMessage() . ' in file: ' . $e->getFile() . ' on line: ' . $e->getLine());
+            return back();
+        }
+
+    }
+
+    public function remove_input_file(Request $request)
+    {
+        DB::table($request['table'])->where('id','=',$request['id'])->update([$request['col']=> null]);
+
+        return back();
+    }
+
+    public function remove_file(Request $request)
+    {
+        DB::table($request->table)->where('id','=',$request->id)->update([$request->col => null]);
+
         return back();
     }
 }

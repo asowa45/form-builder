@@ -14,7 +14,7 @@
                     $subform_level += 1;
                 @endphp
 
-                @component('components.forms.'.$form_field->input_type,['form_field'=>$form_field,'cid'=>$cid,
+                @component('formbuilder::components.forms.'.$form_field->input_type,['form_field'=>$form_field,'cid'=>$cid,
                 'editable'=>$editable,'form_data'=>$form_data,'tableName'=>$tableName,'form_table'=>$form_table,
                 'subform_level'=>$subform_level,'request_id'=>$request_id])
                 @endcomponent
@@ -40,7 +40,7 @@
                                 $form_data_sub = null;
                             }
                         @endphp
-                        @component('components.forms.render.sub_form.child_form',['subform'=>$subform,'editable'=>$editable,
+                        @component('formbuilder::components.forms.render.sub_form.child_form',['subform'=>$subform,'editable'=>$editable,
                         'form_fields'=>$form_fields,'form_data'=>$form_data_sub,'tableName'=>$tableName,'cid'=>$cid,
                         'form_table'=>$form_table,'subform_level'=>$subform_level,'request_id'=>$request_id])
                         @endcomponent

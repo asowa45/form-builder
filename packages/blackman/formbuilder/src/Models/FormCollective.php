@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class FormCollective extends Model
 {
     //
-    protected $fillable = ['form_id','structure_type','submit_type','process_type','active','user_id'];
+    protected $fillable = ['form_id','structure_type','submit_type','process_type',
+        'active','user_id','cover_page'];
 
     public function forms()
     {

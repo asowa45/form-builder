@@ -15,13 +15,14 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('form-builder/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
     @stack('head-scripts')
 </head>
 <body>
 <div id="app">
     <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
         <div class="container">
-            <a href="{{route('forms')}}" class="navbar-brand">Form Builder</a>
+            <a href="{{route('home')}}" class="navbar-brand">Form Builder</a>
         </div>
     </nav>
 
@@ -31,7 +32,7 @@
 </div>
 
 <!-- Scripts -->
-<script src="{{ asset('form-builder/js/jquery.js') }}"></script>
+{{--<script src="{{ asset('form-builder/js/jquery.js') }}"></script>--}}
 {{--<script src="{{ asset('form-builder/js/bootstrap/bootstrap.js') }}"></script>--}}
 <script src="{{ asset('js/app.js') }}" defer></script>
 @stack('script')

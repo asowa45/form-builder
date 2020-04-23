@@ -31,7 +31,7 @@
                                 <tr>
                                     @if(isset($collective->form_collective))
                                     <td>
-                                        <a href="{{route('form_collective.view',[$collective->form_collective->id])}}">
+                                        <a hre="{{route('form_collective.view',[$collective->form_collective->id])}}">
                                             {{$collective->title}}
                                         </a>
                                     </td>
@@ -45,6 +45,9 @@
                                         <td colspan="3" class="text-center text-danger">No Data was provided. Delete and add again</td>
                                     @endif
                                     <td>
+                                        <a href="{{route('form_collective.create',[$collective->id])}}" title="Open" class="btn btn-secondary btn-sm">
+                                            <i class="fa fa-eye"></i> Open
+                                        </a>
                                         <a href="{{route('form.edit',[$collective->id])}}" title="Edit" class="btn btn-secondary btn-sm">
                                             <i class="fa fa-edit"></i> Edit
                                         </a>

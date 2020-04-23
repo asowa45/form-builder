@@ -5,7 +5,7 @@
         <input type="number"
                @if($form_field->required == 1)  required @endif
                @if($form_field->autocomplete == 1)  autocomplete="yes" @endif
-               @if($form_field->disabled == 1 || $editable == 0)  disabled @endif
+               @if($form_field->disabled == 1)  disabled @endif
                placeholder="{{$form_field->placeholder}}"
                @isset($form_field->min)  min="{{$form_field->min}}" @endif
                @isset($form_field->max)  max="{{$form_field->max}}" @endif

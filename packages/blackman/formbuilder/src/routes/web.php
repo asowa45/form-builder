@@ -43,4 +43,9 @@ Route::group([
     Route::delete('/form-collective/{id}/form', 'FormCollectiveController@delete_form')->name('form_collective.form.delete');
     Route::post('/form-collective/generate-form', 'FormCollectiveController@generate_collective_form_tables')->name('generate_collective_form_tables');
 
+    Route::post('/submit-form','FormsController@submitRenderedForm')->name('submit_form');
+
+    Route::get('/download', 'FormsController@getDownload')->name('download_file');
+    Route::get('/set-field-null', 'FormsController@remove_input_file')->name('form_value_input.nullable');
+    Route::delete('/set-field-null', 'FormsController@remove_file')->name('form_value.nullable');
 });

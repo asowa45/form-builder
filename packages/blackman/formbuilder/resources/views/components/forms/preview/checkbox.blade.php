@@ -10,7 +10,7 @@
             @foreach($options as $key=>$option)
                 <div class="form-check form-check-inline">
                     <input class="form-check-input{{ $errors->has($form_field->name) ? ' is-invalid' : '' }} {{$form_field->class}}" type="checkbox"
-                           @if($form_field->disabled == 1 || $editable == 0)  disabled @endif
+                           @if($form_field->disabled == 1)  disabled @endif
                            style="{{$form_field->inline_css}}"
                            {{($form_field->default_value == $option->opt_value)? 'checked':''}}
                            name="{{$form_field->name}}@if($form_field->is_multiple == true)[]@endif"

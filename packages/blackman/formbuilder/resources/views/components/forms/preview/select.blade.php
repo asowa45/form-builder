@@ -16,7 +16,7 @@
                 @if($form_field->required == 1)  required @endif
                 @if($form_field->name == 'description_of_cargos')  onchange="description_of_cargos()"
                 @elseif($form_field->hasChild == 1) onchange="showSubFormSelect_{{$subform_level}}('{{$form_field->name}}')" @endif
-                @if($form_field->disabled == 1 || $editable == 0)  disabled @endif
+                @if($form_field->disabled == 1)  disabled @endif
                 class="form-control select2 {{ $errors->has($form_field->name) ? ' is-invalid' : '' }} {{$form_field->class}}"
                 {{--value="{{old($form_field->name)}}"--}}
                 style="width: 100%; {{$form_field->inline_css}}"

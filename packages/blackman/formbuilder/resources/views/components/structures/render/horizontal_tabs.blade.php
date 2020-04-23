@@ -14,9 +14,6 @@
         @endphp
         {{--TABS--}}
         <ul class="nav nav-tabs nav-top-border {{$active_step}}" id="myTab" role="tablist">
-            @php
-                $count = 1;
-            @endphp
 
             {{--ADDS THE COVER PAGE FORM OR PARENT FORM AS FIRST TAB--}}
             @if($form_collective->cover_page == 1)
@@ -33,16 +30,11 @@
             @endif
 
             {{--LOOPS THROUGH THE VARIOUS FORMS--}}
+            @php $count = 0;@endphp
             @foreach($form_collectives_forms as $form_collectives_form)
                 @php
                     $form_info = $form->where('id','=',$form_collectives_form->form_id)->first();
                 @endphp
-                @if($cargo_info && ($form_info->table_name == 'importers' || $form_info->table_name == 'notify_party'))
-                    {{--@php--}}
-                        {{--$count +=2;--}}
-                    {{--@endphp--}}
-                    @continue
-                @endif
                 @php $count++; @endphp
                 <li class="nav-item">
                     <a class="nav-link {{($count == $active_step)?'active':''}}" id="form_tab_{{$count}}" data-toggle="tab" href="#{{$form_info->slug}}" role="tab"
@@ -55,7 +47,6 @@
 
         {{--TABS CONTENT--}}
         <div class="tab-content" id="myTabContent">
-            @php $count = 1; @endphp
             @if($form_collective->cover_page == 1)
                 @php
                     $count = 0;
@@ -69,14 +60,16 @@
                     </div>
                 </div>
             @endif
+            @php $count = 0; @endphp
             @foreach($form_collectives_forms as $form_collectives_form)
                 @php
                     $form_info = $form->where('id','=',$form_collectives_form->form_id)->first();
                     $form_table = \Illuminate\Support\Str::plural($form_info->table_name);
                     $tableName = \Illuminate\Support\Str::plural($parent_table."_".$form_table);
+                    $parent_table_FK = \Illuminate\Support\Str::singular($parent_table)."_id";
                     if (isset($request_id)){
                         $form_data = \Illuminate\Support\Facades\DB::table($tableName)
-                        ->where('clearance_request_id',\Illuminate\Support\Facades\Crypt::decrypt($request_id))
+                        ->where("$parent_table_FK",\Illuminate\Support\Facades\Crypt::decrypt($request_id))
                         ->first();
                         $form_data = (array)$form_data;
                     }else{
@@ -89,9 +82,6 @@
 
                 @endphp
                 @php $count++; @endphp
-                @if($cargo_info && ($form_table == 'importers' || $form_table == 'notify_party'))
-                    @continue
-                @endif
                 <div class="tab-pane fade  {{($count == $active_step)?'show active':''}}" id="{{$form_info->slug}}" role="tabpanel"
                      aria-labelledby="form_tab_{{$count}}">
                     <div class="card-body">
@@ -101,7 +91,7 @@
                         @endisset
                         @if($form_collective->submit_type == 'individual' && $editable == 1)
                             <form action="{{($submit_url == null)?route('submit_form'): $submit_url}}"
-                                  @if($contain_file > 0) enctype="multipart/form-data" @endif
+                                  @if($contain_file) enctype="multipart/form-data" @endif
                                   method="post" id="{{$form_info->table_name}}">@csrf
                                 <input type="hidden" name="form_id" value="{{$form_info->id}}">
                                 <input type="hidden" name="request_id" value="@if($request_id != null) {{$request_id }} @endif">
@@ -147,21 +137,21 @@
                                 @endif
                             @endforeach
                         </div>
-                        @if($form_collective->submit_type === 'individual' && $editable === 1)
+                        @if($form_collective->submit_type == 'individual' && $editable == 1)
                             <button type="submit" class="btn btn-success mt-2 mb-3">Save</button>
                             </form>
-                            @ability('webmaster|client','add-requests|edit-requests')
-                                @if($form_info->id == 14 && isset($request))
-                                    <form action="{{route('clearance_request.submit')}}" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="request_id"
-                                               value="{{\Illuminate\Support\Facades\Crypt::encrypt($request->id)}}">
-                                        <button type="submit" class="btn btn-success box-shadow-1">
-                                            <i class="fa fa-check-circle"></i> Submit Request
-                                        </button>
-                                    </form>
-                                @endif
-                            @endrole
+                            {{--@ability('webmaster|client','add-requests|edit-requests')--}}
+                                {{--@if($form_info->id == 14 && isset($request))--}}
+                                    {{--<form action="{{route('clearance_request.submit')}}" method="POST">--}}
+                                        {{--@csrf--}}
+                                        {{--<input type="hidden" name="request_id"--}}
+                                               {{--value="{{\Illuminate\Support\Facades\Crypt::encrypt($request->id)}}">--}}
+                                        {{--<button type="submit" class="btn btn-success box-shadow-1">--}}
+                                            {{--<i class="fa fa-check-circle"></i> Submit Request--}}
+                                        {{--</button>--}}
+                                    {{--</form>--}}
+                                {{--@endif--}}
+                            {{--@endrole--}}
                         @endif
                     </div>
                 </div>

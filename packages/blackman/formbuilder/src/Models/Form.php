@@ -28,6 +28,16 @@ class Form extends Model
         return $query->where('active', '=', 1)->where('collective', '=', 0);
     }
 //
+    public function scopeIsCollective($query)
+    {
+        $isTrue = $query->where('collective', '=', 1)->count();
+
+        if ($isTrue > 0) {
+            return true;
+        }
+        return false;
+    }
+//
     public function scopeCollectives($query)
     {
         return $query->where('collective', '=', 1);

@@ -14,14 +14,7 @@
                 @if($form_field->has_auto_options > 1) tagsInput auto_multi @endif"
                @if($form_field->has_auto_options > 1) data-role="tagsinput" @endif
                style="{{$form_field->inline_css}}"
-               @if($form_table == "contact_informations" && !isset($form_data[$form_field->name]) && session()->has('request_placeholder_info'))
-                       @php
-                        $val = session('request_placeholder_info');
-                       @endphp
-                    value = "{{$val[$form_field->name]}}"
-               @else
                    value="{{old($form_field->name,isset($form_data[$form_field->name])?$form_data[$form_field->name]:$form_field->default_value)}}"
-               @endif
                name="{{$form_field->name}}"
                id="{{$form_field->name}}">
         @if ($errors->has($form_field->name))

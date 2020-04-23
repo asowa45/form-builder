@@ -13,9 +13,14 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 
 class FormCollectiveController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
     public function index()
     {
@@ -28,32 +33,36 @@ class FormCollectiveController extends Controller
         $form_collective = FormCollective::where('form_id','=',$form_id)->first();
         $form = Form::find($form_id);
         $forms = Form::where('collective','=',0)->where('active','=',1)->get();
-
-        $form_collectives_forms = $form->form_collective->form_collectives_forms;
-//        dd($form_collectives_forms);
+        $form_collectives_forms = null;
+        if ($form_collective) {
+            $form_collectives_forms = $form->form_collective->form_collectives_forms;
+        }
+//        dd($form_collective);
         return view('formbuilder::collectives.create',
             compact('form_collective','forms','form_id','form','form_collectives_forms'));
     }
 
     public function save(Request $request, $form_id)
     {
-//        dd($request->all());
         if (isset($request->properties)) {
             $this->validate($request,[
-                'form_id' => 'required|numeric|min:1',
+                'form_id' => 'required|string|min:1',
                 'structure_type' => 'required|string',
                 'submit_type' => 'required|string',
                 'process_type' => 'required|string',
-//            'forms' => 'nullable|array|min:1',
+                'cover_page' => 'nullable|string|min:1',
             ]);
-//        dd($request->all());
+//            dd($request->all());
 
             FormCollective::updateOrCreate([
-                'form_id' => $request->form_id,
+                'form_id' => $request->form_id
+            ],
+                [
                 'structure_type' => $request->structure_type,
                 'submit_type' => $request->submit_type,
                 'process_type' => $request->process_type,
-//            'user_id' => Auth::id(),
+                'cover_page' => $request->cover_page,
+                'user_id' => Auth::id(),
             ]);
             session()->flash('status','Form Collective properties updated.');
         }
@@ -62,12 +71,13 @@ class FormCollectiveController extends Controller
 //        dd($request->all());
             $this->validate($request,[
                 'form_id' => 'required|numeric|min:1',
+                'form' => 'required|numeric|min:1',
                 'form_collective_id' => 'required|numeric',
                 'order' => 'required|numeric|min:0',
             ]);
 
             FormCollectivesForm::create([
-                'form_id' => $request->form_id,
+                'form_id' => $request->form,
                 'form_collective_id' => $request->form_collective_id,
                 'order' => $request->order,
                 'active' => 1,
@@ -134,9 +144,10 @@ class FormCollectiveController extends Controller
         if (!$form_collective && $form->collective == 1){
             return redirect()->route('form_collective.create',[$form_id]);
         }
-//        dd($form_collective);
+
         $structure = $form->form_collective->structure_type;
         $form_collectives_forms = $form->form_collective->form_collectives_forms->sortBy('order');
+
         return view('formbuilder::collectives.preview_form',compact('form','structure','form_collective','form_collectives_forms'));
     }
 
@@ -160,7 +171,7 @@ class FormCollectiveController extends Controller
 
         //GET THE PARENT FORM COLLECTIVE
         $parent_form = $form_collective->form;
-        $parent_table = str_plural($parent_form->table_name);
+        $parent_table = Str::plural($parent_form->table_name);
 
         //CREATE A PARENT TABLE TO REFERENCE ALL OTHER RELATED TABLES
         if (!Schema::hasTable($parent_table)) {
@@ -171,11 +182,13 @@ class FormCollectiveController extends Controller
                     $table->tinyInteger('counter')->default(0);
                 }
                 $table->tinyInteger('status');
-                $table->unsignedInteger('user_id');
-                $table->foreign('user_id',substr('users_'.$parent_table, 0,10))
-                    ->references('id')->on('users');
+                $table->integer('user_id')->unsigned();
                 $table->timestamp('created_at')->useCurrent();
                 $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
+            });
+            Schema::table($parent_table, function(Blueprint $table) use ($parent_table) {
+                $table->foreign('user_id',substr('users_'.$parent_table, 0,10))
+                    ->references('id')->on('users');
             });
         }
 
@@ -190,14 +203,14 @@ class FormCollectiveController extends Controller
             $form = $form_collectives_form->form;
 
             //CONCATENATE THE PARENT TABLE NAME WITH THE SELECT FORM TABLE NAME
-            $tableName = str_plural($parent_table."_".$form->table_name);
+            $tableName = Str::plural($parent_table."_".$form->table_name);
 
             //GET ALL THE FIELDS BELONGING TO THE SELECTED FORM
             $form_fields = $form->fields;
 
             //CREATE THE SCHEMA FOR THE SELECTED FORM
             //CHECKS IF THE TABLE ALREADY EXISTS
-            if (Schema::hasTable(str_plural($tableName))) {
+            if (Schema::hasTable(Str::plural($tableName))) {
 
                 //UPDATES THE TABLE BY ADDING THE NEW COLUMNS
                 $this->update_form_table($tableName,$form_fields,$parent_form,$form,$hasChild=false);
@@ -217,7 +230,7 @@ class FormCollectiveController extends Controller
             $command = 'make:model';
 
             $params = [
-                'name' => studly_case(str_singular($parent_form->table_name)),
+                'name' => Str::studly(Str::singular($parent_form->table_name)),
             ];
 
             //CREATES A MODEL FOR THE PARENT FORM TABLE IN THE DEFAULT MODELS DIRECTORY
@@ -227,7 +240,7 @@ class FormCollectiveController extends Controller
             $form_collective->generate = false;
             $form_collective->save();
         }
-        notify(new ToastNotification('Successful','The Form and its related tables have been generated.','success'));
+//        notify(new ToastNotification('Successful','The Form and its related tables have been generated.','success'));
         session()->flash('status','Table created.');
         return back();
     }
@@ -243,13 +256,13 @@ class FormCollectiveController extends Controller
 
         Schema::table($tableName, function (Blueprint $table) use ($form_fields,$parent_form,$tableName,$form,$hasChild) {
 
-            $parent_id = str_singular($parent_form->table_name).'_id';
+            $parent_id = Str::singular($parent_form->table_name).'_id';
             if (!Schema::hasColumn($tableName, $parent_id)) {
 
                 $table->unsignedInteger($parent_id);
                 $table->foreign($parent_id,substr($form->table_name.'_'.$parent_form->table_name, 0,10))
                     ->references('id')
-                    ->on(str_plural($parent_form->table_name))
+                    ->on(Str::plural($parent_form->table_name))
                     ->onDelete('cascade');
             }
             //BUILDING THE DATA-TYPES AND COLUMNS USING THE FIELDS ATTRIBUTES AND FIELDS RESPECTIVELY
@@ -298,13 +311,13 @@ class FormCollectiveController extends Controller
                 //SELECTS EACH FORM TO CREATE THE TABLE
                 $parent_table = $parent_form->table_name;
                 //CONCATENATE THE PARENT TABLE NAME WITH THE SELECT FORM TABLE NAME
-                $tableName = str_plural($parent_table."_sub_".$form->table_name);
+                $tableName = Str::plural($parent_table."_sub_".$form->table_name);
 
                 //GET ALL THE FIELDS BELONGING TO THE SELECTED FORM
                 $form_fields = $form->fields;
 
                 //CHECK IF THE SUB-FORM ALREADY EXIST
-                if (Schema::hasTable(str_plural($tableName))) {
+                if (Schema::hasTable(Str::plural($tableName))) {
 
                     //UPDATES THE TABLE BY ADDING THE NEW COLUMNS
                     $this->update_form_table($tableName,$form_fields,$parent_form,$form,TRUE);
@@ -326,14 +339,9 @@ class FormCollectiveController extends Controller
      */
     protected function generate_form_table($tableName,$form_fields,$parent_form,$form,$hasChild=false){
         Schema::create($tableName, function (Blueprint $table) use ($form_fields,$parent_form,$form,$hasChild) {
-            $parent_id = str_singular($parent_form->table_name).'_id';
+            $parent_id = Str::singular($parent_form->table_name).'_id';
             $table->increments('id');
-            $table->unsignedInteger($parent_id);
-            $table->foreign(str_singular($parent_form->table_name).'_id',
-                substr($form->table_name.'_'.$parent_form->table_name, 0,10))
-                ->references('id')
-                ->on(str_plural($parent_form->table_name))
-                ->onDelete('cascade');
+            $table->integer($parent_id)->unsigned();
 
             foreach ($form_fields as $form_field) {
 
@@ -366,6 +374,14 @@ class FormCollectiveController extends Controller
             }
 
             $table->timestamps();
+        });
+
+        Schema::table($tableName, function (Blueprint $table) use ($parent_form,$form) {
+            $table->foreign(Str::singular($parent_form->table_name).'_id',
+                substr($form->table_name.'_'.$parent_form->table_name, 0,10))
+                ->references('id')
+                ->on(Str::plural($parent_form->table_name))
+                ->onDelete('cascade');
         });
     }
 }

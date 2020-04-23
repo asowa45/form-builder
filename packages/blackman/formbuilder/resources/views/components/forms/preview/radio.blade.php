@@ -15,7 +15,7 @@
             @foreach($options as $key=>$option)
                 <div class="form-check form-check-inline">
                     <input class="form-check-input{{ $errors->has($form_field->name) ? ' is-invalid' : '' }} {{$form_field->class}}" type="radio"
-                           @if($form_field->disabled == 1 || $editable == 0)  disabled @endif
+                           @if($form_field->disabled == 1)  disabled @endif
                            style="{{$form_field->inline_css}}"
                            name="{{$form_field->name}}"
                            {{($form_field->default_value == $option->opt_value)? 'checked':''}}
