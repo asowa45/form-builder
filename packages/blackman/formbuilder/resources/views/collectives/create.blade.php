@@ -27,18 +27,18 @@
                             <input type="hidden" name="form_id" value="{{$form_id}}">
                             <div class="row">
                                 <div class="form-group col-md-4">
-                                    <label for="cover_page">Set as Cover page<span class="text-mute"></span></label>
+                                    <label for="cover_page">Set as Cover page *<span class="text-mute"></span></label>
                                     <br>
-                                    <select name="cover_page" style="width: 100%;" class="form-control select2" id="cover_page">
+                                    <select name="cover_page" style="width: 100%;" required class="form-control select2" id="cover_page">
                                         <option value="">--Choose--</option>
                                         <option @if($form_collective){{($form_collective->cover_page == 0)?'selected': ''}}@endif value=0>No</option>
                                         <option @if($form_collective){{($form_collective->cover_page ==1)?'selected': ''}}@endif value=1>Yes</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-4">
-                                    <label for="structure_type">Structure Type<span class="text-mute"></span></label>
+                                    <label for="structure_type">Structure Type *<span class="text-mute"></span></label>
                                     <br>
-                                    <select name="structure_type" style="width: 100%;" class="form-control select2" id="structure_type">
+                                    <select name="structure_type" style="width: 100%;" required class="form-control select2" id="structure_type">
                                         <option value="">--Choose--</option>
                                         {{--<option {{(old('structure_type')=='accordion')?'selected': ''}} value="accordion">Accordion</option>--}}
                                         <option @if($form_collective){{($form_collective->structure_type =='horizontal_tabs')?'selected': ''}}@endif value="horizontal_tabs">Horizontal Tabs</option>
@@ -47,21 +47,21 @@
                                     </select>
                                 </div>
                                 <div class="form-group col-md-4">
-                                    <label for="submit_type">Submit Type<span class="text-mute"></span></label>
+                                    <label for="submit_type">Submit Type *<span class="text-mute"></span></label>
                                     <br>
-                                    <select name="submit_type" style="width: 100%;" class="form-control select2" id="submit_type">
+                                    <select name="submit_type" style="width: 100%;" required class="form-control select2" id="submit_type">
                                         <option value="">--Choose--</option>
-                                        <option @if($form_collective){{($form_collective->submit_type =='individual')?'selected': ''}}@endif value="individual">Individual</option>
-                                        <option @if($form_collective){{($form_collective->submit_type =='group')?'selected': ''}}@endif value="group">Group</option>
+                                        <option @if($form_collective){{($form_collective->submit_type =='individual')?'selected': ''}}@endif value="individual">Individual Form</option>
+{{--                                        <option @if($form_collective){{($form_collective->submit_type =='group')?'selected': ''}}@endif value="group">Group</option>--}}
                                     </select>
                                 </div>
                                 <div class="form-group col-md-4">
-                                    <label for="required">Process Type<span class="text-mute"></span></label>
+                                    <label for="required">Process Type *<span class="text-mute"></span></label>
                                     <br>
-                                    <select name="process_type" style="width: 100%;" class="form-control select2" id="process_type">
+                                    <select name="process_type" style="width: 100%;" required class="form-control select2" id="process_type">
                                         <option value="">--Choose--</option>
                                         <option @if($form_collective){{($form_collective->process_type =='steps')?'selected': ''}}@endif value="steps">Steps</option>
-                                        <option @if($form_collective){{($form_collective->process_type =='open')?'selected': ''}}@endif value="group">Open</option>
+{{--                                        <option @if($form_collective){{($form_collective->process_type =='open')?'selected': ''}}@endif value="group">Open</option>--}}
                                     </select>
                                 </div>
                                 <div class="form-group col-md-4">
