@@ -201,18 +201,15 @@ class FormsController extends Controller
      */
     public function build_form($form_id)
     {
-//        return "Builder";
         $form = Form::find($form_id);
         $form_fields = Field::where('form_id','=',$form_id)->orderBy('order','asc')
             ->orderBy('label','asc')->get();
         $forms = Form::where('id','<>',$form_id)->orderBy('title','asc')->get();
-//
         $f_fields = new FormEntities();
         $lookups = LookupOption::all();
         $fields = $f_fields->getFieldTypes();
         $roles = [];
-//
-//        return $form;
+
         return view('formbuilder::form.build_field', compact('fields','form','forms','form_fields','lookups', 'roles'));
     }
 
@@ -222,7 +219,6 @@ class FormsController extends Controller
      */
     public function form_preview($form_id)
     {
-//        return "Form Preview";
         $form = Form::find($form_id);
         $form_fields = Field::where('form_id','=',$form_id)->orderBy('order','asc')
             ->orderBy('label','asc')->get();
